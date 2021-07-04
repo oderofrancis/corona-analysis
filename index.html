@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corona Visualisation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .navbar  {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            /* padding:0.5em 0.375em; */
+            height: 50px;
+        }
+
+        .navbar .navbar-brand {
+            font-weight: 800;
+            font-size: 20px;
+            text-decoration: none;
+            color:#222;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar-nav .nav-item {
+            line-height: 1.4;
+            margin:0px 10px;
+        }
+
+        .nav-item .nav-link {
+            font-size: 16px;
+            color: #232323;;
+            text-decoration:none;
+        }
+
+        .main  {
+            display: block;
+            width: 100%;
+            height: 90vh;
+            position:relative;
+        }
+
+        .chart-section {
+            position: absolute;
+            top:0;
+            left:0;
+            z-index: 3;
+            width:250px;
+            height: 90vh;
+            background-color: white;
+            box-shadow: 1px 1px 0.2em #ccc;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .card .card-title {
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .card .card-caption {
+            font-size: 16px;
+        }
+
+        .stats-section {
+            position:absolute;
+            top:0;
+            right:0;
+            z-index: 3;
+            width:200px;
+            height: 90vh;
+            background-color:white;
+            box-shadow: 1px 1px 0.2em #ccc;
+        }
+
+        #map {
+            width: 100%;
+            height: 90vh;
+            background:#ddd;
+            z-index: 0;
+        }
+
+        .footer {
+            background-color: #333;
+            padding: 0.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">Corona Visual</a>
+        <div class="navbar-nav collapse-navbar">
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Link</a>
+            </li>
+        </div>
+    </nav>
+    
+    <div class="main">
+        <div class="chart-section">
+            <div class="card">
+                <div class="card-title" id="recovered-cases">
+                    300M
+                </div>
+                <div class="card-caption">Confirmed Cases</div>
+            </div>
+
+            <div class="d3-charts">
+                <div id="bar-chart"></div>
+            </div>
+        </div>
+        <div class="map" id="map"></div>
+
+        <div class="stats-section">
+            <div class="card">
+                <div class="card-title" id="recovered-cases">
+                    30M
+                </div>
+                <div class="card-caption">Recovered Cases</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title" id="death-cases">
+                    10M
+                </div>
+                <div class="card-caption">Confirmed Deaths</div>
+            </div>
+        </div>
+    </div>  
+
+    <div class="footer">
+        <div>&copy 2021</div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+        var map = L.map('map').setView([31.4996,-5.9193], 2);
+        let layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
+            attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20,
+            minZoom: 0
+        });
+
+        layer.addTo(map);
+
+        let barChart = document.getElementById('bar-chart');
+        map.on('moveend', function(e) {
+            barChart.innerHTML = `<p>${Object.values(map.getCenter())}</p>`;
+        });
+    </script>
+</body>
+</html>
